@@ -82,52 +82,84 @@ map<int,struct time_count> TestNewSolution(char *file_name)
     
     ReadKeywords(keywords_list, file_name); 
 
-    gettimeofday(&time1,NULL);
+//    gettimeofday(&time1,NULL);
     
     // transfer keywords_list to a string
     string keywords_string;
     
     Keywords_to_str(keywords_list, keywords_string);
-    
+
     // Building and encrypt position heap
     PositionHeap *heap = new PositionHeap(keywords_string.c_str(), aes_key, keywords_list);
     
-    gettimeofday(&time2,NULL);
+//    gettimeofday(&time2,NULL);
 
     //sec
-    float evaluate_time = ((time2.tv_sec-time1.tv_sec) + ((double)(time2.tv_usec-time1.tv_usec))/1000000);
+//    float evaluate_time = ((time2.tv_sec-time1.tv_sec) + ((double)(time2.tv_usec-time1.tv_usec))/1000000);
     
-    cout << "Outsourcing time: " << evaluate_time << endl;
+//    cout << "Outsourcing time: " << evaluate_time << endl;
+
+    float evaluate_time = 0;
+
+    string insert_keyword;
     
+    int Repeat_time = 100;
+//    int Keyword_len = 7;
+    int Keyword_len;
+    cout << "keyword_len:";
+    cin >> Keyword_len;
+
+    int count = 0;
+
+    // Insert 
+    for (int i = 0; i < Repeat_time; i++){
+        if (keywords_list[i].size() > Keyword_len){
+            insert_keyword.assign(keywords_list[i], 0, Keyword_len);
+            gettimeofday(&time1,NULL);
+            heap->Insert(insert_keyword, aes_key);
+            gettimeofday(&time2,NULL);
+            count++;
+            evaluate_time += ((time2.tv_sec-time1.tv_sec) + ((double)(time2.tv_usec-time1.tv_usec))/1000000);
+        }
+    }
+    
+    
+
+    cout << "keyword_len:" << Keyword_len <<", count: " << count << ", insert time: " << evaluate_time/count << endl;
+    
+ 
+    
+    // Search
+    map<int,struct time_count> test_count;
+//
 //    char S[20] = {0};
 //    cout << "search keyword:";
 //    cin >> S;
     
-    // Search
-    map<int,struct time_count> test_count;
-    
-    for(auto it = keywords_list.begin(); it != keywords_list.end(); it++){
-        gettimeofday(&time1,NULL);
+//    for(auto it = keywords_list.begin(); it != keywords_list.end(); it++){
+//        gettimeofday(&time1,NULL);
         
-        vector<string> matching_keywords = heap->search((*it).c_str(), aes_key);
+//        vector<string> matching_keywords = heap->search((*it).c_str(), aes_key);
+//        vector<string> matching_keywords = heap->search(S, aes_key);
 
 //        for(int i = 0; i < matching_keywords.size(); i++)
 //            cout << matching_keywords[i] << endl;
     
-        gettimeofday(&time2,NULL);
+//        gettimeofday(&time2,NULL);
 
         //msec
-        evaluate_time = 1000*((time2.tv_sec-time1.tv_sec) + ((double)(time2.tv_usec-time1.tv_usec))/1000000);
+//        float evaluate_time = 1000*((time2.tv_sec-time1.tv_sec) + ((double)(time2.tv_usec-time1.tv_usec))/1000000);
+
         
-        if (test_count.count((matching_keywords).size())==0){
-            time_count map_value = {evaluate_time, 1};
-            test_count[(matching_keywords).size()] = map_value;
-        }
-        else{
-            test_count[(matching_keywords).size()].total_time += evaluate_time;
-            test_count[(matching_keywords).size()].test_num += 1;
-        }
-    }
+//        if (test_count.count((matching_keywords).size())==0){
+//            time_count map_value = {evaluate_time, 1};
+//            test_count[(matching_keywords).size()] = map_value;
+//        }
+//        else{
+//            test_count[(matching_keywords).size()].total_time += evaluate_time;
+//            test_count[(matching_keywords).size()].test_num += 1;
+//        }
+//    }
     
 //    for(auto itr = test_count.begin(); itr != test_count.end(); itr++)
 //        cout << "matching_keywords size: " << (itr)->first << ", " <<  "time: " << 
@@ -187,8 +219,11 @@ public:
                                                     iv, 
                                                     (unsigned char *)&ciphertext_keyword[AES_BLOCK_SIZE]);
     }
+    
+    ~BFIndex(){
+        delete filter;
+    }
 
-    // 
     string search(string &search_keyword, unsigned char *aes_key) {
         string result;
         
@@ -202,13 +237,9 @@ public:
         }
         
         return result;
-    }
-    
-    ~BFIndex(){
-        delete filter;
-    }
-    
+    }        
 };
+
 map<int,struct time_count> TestNaiveSolution(char *file_name)
 {
     struct timeval time1,time2;
@@ -230,75 +261,88 @@ map<int,struct time_count> TestNaiveSolution(char *file_name)
         index[i] = new BFIndex(keywords_list[i], aes_key);
     }
 
-//    char S[20] = {0};
-//    
-//    cout << "search keyword:";
-//    
-//    cin >> S;
+    // Insert
+    string insert_keyword;
+    int Repeat_time = 100;
+    int Keyword_len;
+    cout << "keyword_len:";
+    cin >> Keyword_len;
+    int count = 0;
+    float evaluate_time = 0;
+    int BF_size;
     
-//    string search_keyword(S);
-
-    // Search
-    map<int,struct time_count> test_count;
-    
-    for(auto it = keywords_list.begin(); it != keywords_list.end(); it++){
-        vector<string> matching_keywords;
-        string return_keyword;
-    
-        gettimeofday(&time1,NULL);
-    
-        for (int i = 0; i < keywords_list.size(); i++){
-            return_keyword = index[i] -> search((*it), aes_key);
-            
-            if (return_keyword.size() > 0){
-                matching_keywords.push_back(return_keyword);
-            }
-        }
-    
-        gettimeofday(&time2,NULL);
-
-        // msec
-        float evaluate_time = 1000*((time2.tv_sec-time1.tv_sec) + ((double)(time2.tv_usec-time1.tv_usec))/1000000);
-        
-        if (test_count.count((matching_keywords).size())==0){
-            time_count map_value = {evaluate_time, 1};
-            test_count[(matching_keywords).size()] = map_value;
-        }
-        else{
-            test_count[(matching_keywords).size()].total_time += evaluate_time;
-            test_count[(matching_keywords).size()].test_num += 1;
+    for (int i = 0; i < Repeat_time; i++){
+        if (keywords_list[i].size() > Keyword_len){
+            insert_keyword.assign(keywords_list[i], 0, Keyword_len);
+            gettimeofday(&time1,NULL);
+            BFIndex *insert_index = new BFIndex(insert_keyword, aes_key);
+            gettimeofday(&time2,NULL);
+            count++;
+            BF_size = sizeof
+            delete insert_index;
+            evaluate_time += ((time2.tv_sec-time1.tv_sec) + ((double)(time2.tv_usec-time1.tv_usec))/1000000);
         }
     }
+
+    cout << "keyword_len:" << Keyword_len <<", count: " << count << ", insert time: " << evaluate_time/count << endl;
+    
+    
+    // Search
+    map<int,struct time_count> test_count;
+
+    //    char S[20] = {0};
+    //    
+    //    cout << "search keyword:";
+    //    
+    //    cin >> S;
+        
+    //    string search_keyword(S);
+    
+//    for(auto it = keywords_list.begin(); it != keywords_list.end(); it++){
+//        vector<string> matching_keywords;
+//        string return_keyword;
+//    
+//        gettimeofday(&time1,NULL);
+//    
+//        for (int i = 0; i < keywords_list.size(); i++){
+//            return_keyword = index[i] -> search((*it), aes_key);
+//            
+//            if (return_keyword.size() > 0){
+//                matching_keywords.push_back(return_keyword);
+//            }
+//        }
+//    
+//        gettimeofday(&time2,NULL);
+//
+//        // msec
+//        float evaluate_time = 1000*((time2.tv_sec-time1.tv_sec) + ((double)(time2.tv_usec-time1.tv_usec))/1000000);
+//        
+//        if (test_count.count((matching_keywords).size())==0){
+//            time_count map_value = {evaluate_time, 1};
+//            test_count[(matching_keywords).size()] = map_value;
+//        }
+//        else{
+//            test_count[(matching_keywords).size()].total_time += evaluate_time;
+//            test_count[(matching_keywords).size()].test_num += 1;
+//        }
+//    }
     
 //    for(auto itr = test_count.begin(); itr != test_count.end(); itr++)
 //        cout << "matching_keywords size: " << (itr)->first << ", " << "count: " << (itr)->second.test_num << ", "<<  "time: " << 
 //        (itr)->second.total_time/(itr)->second.test_num << endl;
-    
-    
+      
     return test_count;
 }
-
-
 
 int main(int argc, char * argv[])
 {
     
-    char file_name[20] = "distinct_word_35000";
+    char file_name[20] = "distinct_word_5000";
     
-    map<int,struct time_count> result_new;
-    map<int,struct time_count> result_naive;
+//    TestNewSolution(file_name);
+    TestNaiveSolution(file_name);
+
     
-    result_new = TestNewSolution(file_name);
-    result_naive = TestNaiveSolution(file_name);
-
-    for(auto itr = result_new.begin(); itr != result_new.end(); itr++)
-        if (result_naive.count((itr)->first) > 0){
-            cout << "matching_keywords size: " << (itr)->first << ", " 
-                <<  "new time: " << (itr)->second.total_time/(itr)->second.test_num << ", "
-                <<  "naive time: " << (result_naive[(itr)->first]).total_time/(result_naive[(itr)->first]).test_num << endl;
-                
-        }
-
     return 0;
 }
 
