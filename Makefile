@@ -2,8 +2,8 @@ COMPILER         = g++
 #COMPILER         = clang++
 OPTIMIZATION_OPT = -O1
 OPTIONS          =  -w -std=c++0x $(OPTIMIZATION_OPT) -g -o 
-LINKER_OPT       =  -L/usr/lib64/ -lcrypto -lpbc -lgmp 
-INCLUDE_OPT	 = 	-I./include -I/usr/local/src/pbc-0.5.14/include/ 
+LINKER_OPT       =  -L/usr/lib64/ -lcrypto
+INCLUDE_OPT	 = 	-I./include
 SRC_FILE	 = ./*.cpp
 BIN_DIR		 = .
 TARGET		 = SubstringQueryScheme

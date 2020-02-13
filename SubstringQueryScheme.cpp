@@ -7,9 +7,6 @@
 #include <vector>         // std::vector 
 #include <sys/time.h>     // gettimeofday
 #include <stack>          // std::stack
-#include <pbc.h>
-#include <pbc_test.h>
-#include "AES.h"
 #include <openssl/hmac.h>
 #include <openssl/aes.h>
 #include <openssl/rand.h>
@@ -17,6 +14,7 @@
 
 #include "PHIndex.h"
 #include "BFIndex.h"
+#include "AES.h"
 
 
 using namespace std;
