@@ -1,6 +1,6 @@
 # Pre-requisites
 
-The project has been successfully built and tested on CentOS 6.6. It uses OpenSSL library to implement the entailed cryptographic operations. The build commands in CentOS are as follows.
+The program has been successfully built and tested on CentOS 6.6. It uses OpenSSL library to implement the entailed cryptographic operations. The build commands in CentOS are as follows.
 
 ## OpenSSL
 
@@ -19,18 +19,18 @@ $ make install
 The code is available *via* git:
 
 ```sh
- $ git clone git@github.com:YinFFF/Multi-keyword-SSE.git
+ $ git clone git@github.com:YinFFF/Substring-keyword-SSE.git
 ```
 
 # Usage
 
-This project includes two source files: AES.cpp and PMCQueryScheme.cpp: the former contains interface functions for AES, and the latter contains the implement of the proposed scheme and the test functions.
+This project includes two source files: AES.cpp and SubstringQueryScheme.cpp: the former contains interface functions for AES, and the latter contains the implement of the test functions.
 
 ## Build and run
 
 ```sh
-$ cd Multi-keyword-SSE/
+$ cd Substring-keyword-SSE/
 $ ./make
-$ ./PMCQueryScheme
+$ ./SubstringQueryScheme
 
 ```
