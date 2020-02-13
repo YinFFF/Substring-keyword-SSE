@@ -1,6 +1,6 @@
 # Pre-requisites
 
-The program has been successfully built and tested on CentOS 6.6. It uses OpenSSL library to implement the entailed cryptographic operations. The build commands in CentOS are as follows.
+The project has been successfully built and tested on CentOS 6.6. It uses OpenSSL library to implement the entailed cryptographic operations. The build commands in CentOS are as follows.
 
 ## OpenSSL
 
