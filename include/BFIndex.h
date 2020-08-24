@@ -41,7 +41,7 @@ public:
 
         ciphertext_keyword = plaintext_keyword;
         
-        ciphertext_keyword.resize(plaintext_keyword.size() + AES_BLOCK_SIZE);
+        ciphertext_keyword.resize(plaintext_keyword.size() + 2 * AES_BLOCK_SIZE);
         
         unsigned char iv[AES_BLOCK_SIZE];
         

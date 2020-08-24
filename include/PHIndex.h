@@ -34,7 +34,7 @@ public:
                                          (unsigned char*)&nodes[itr->second].keyword[0], 
                                          output);
         
-            string plaintext((const char*)output, plaintext_len - 1);
+            string plaintext((const char*)output, plaintext_len);
             ret.push_back(plaintext);
             appendSubtree(itr->second, ret, aes_key);
         }
@@ -56,12 +56,13 @@ public:
             }
             int v = n;
             string childs_key(1, *q);
+
             while (nodes[v].childs.find(childs_key) != nodes[v].childs.end()){
                 v = nodes[v].childs[childs_key];
                 childs_key.append((++q), 1);
             }
             nodes[v].childs[childs_key] = i;
-            nodes[i].keyword.resize(keywords_list[keyword_index].size() + AES_BLOCK_SIZE);
+            nodes[i].keyword.resize(keywords_list[keyword_index].size() + 2 * AES_BLOCK_SIZE);
             RAND_bytes((unsigned char*)iv, AES_BLOCK_SIZE);
             nodes[i].keyword.replace(0, AES_BLOCK_SIZE, (const char*)iv, AES_BLOCK_SIZE);
             nodes[i].ciphertext_len = AES_encrypt((unsigned char *)&keywords_list[keyword_index][0], 
@@ -99,7 +100,7 @@ public:
             int plaintext_len = AES_decrypt((unsigned char*)&nodes[v].keyword[AES_BLOCK_SIZE], nodes[v].ciphertext_len, 
                         aes_key, (unsigned char*)&nodes[v].keyword[0], output);
             
-            string plaintext((const char*)output, plaintext_len -1);
+            string plaintext((const char*)output, plaintext_len);
             
             ret.push_back(plaintext);
         }

@@ -37,16 +37,19 @@ void ReadKeywords(vector<string> &keywords_list, char* file_name){
 }
 
 void Keywords_to_str(vector<string> &keywords_list, string &keywords_string){
+    if (keywords_string[keywords_string.size() - 1] == '\r')
+        keywords_string.pop_back();
+
     int total_len = 0;
     for(int i = 0; i < keywords_list.size(); i++){
-        total_len += (keywords_list[i].size() - 1);
+        total_len += (keywords_list[i].size());
     }
     keywords_string.resize(total_len + keywords_list.size());
 
     int current_position = 0;
     for(int i = 0; i < keywords_list.size(); i++){
-        keywords_string.replace(current_position, keywords_list[i].size() - 1, keywords_list[i]);
-        current_position += keywords_list[i].size() - 1;
+        keywords_string.replace(current_position, keywords_list[i].size(), keywords_list[i]);
+        current_position += keywords_list[i].size();
         keywords_string.replace(current_position, 1, "#");
         current_position ++;
     }
@@ -132,7 +135,8 @@ int TestNaiveSolution(char *file_name)
 int main(int argc, char * argv[])
 {
     
-    char file_name[30] = "./Testfile/distinct_word_5000";
+    char file_name[50] = "./Testfile/distinct_word_5000";
+    //char file_name[50] = "DNA1K";
     
     TestNewSolution(file_name);
 //    TestNaiveSolution(file_name);
