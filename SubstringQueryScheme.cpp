@@ -14,6 +14,7 @@
 
 #include "PHIndex.h"
 #include "BFIndex.h"
+#include "BWT.h"
 #include "AES.h"
 
 
@@ -38,7 +39,7 @@ void ReadKeywords(vector<string> &keywords_list, char* file_name){
 
 void Keywords_to_str(vector<string> &keywords_list, string &keywords_string){
     if (keywords_string[keywords_string.size() - 1] == '\r')
-        keywords_string.pop_back();
+        keywords_string = keywords_string.substr(0, keywords_string.size() - 1);
 
     int total_len = 0;
     for(int i = 0; i < keywords_list.size(); i++){
@@ -167,7 +168,7 @@ int TestBWTSolution(char *file_name)
     for(auto it = keywords_list.begin(); it != keywords_list.end(); it++){
         gettimeofday(&time1, NULL);
         //deque<Node *> matching_keywords = bwt->search(input.c_str(), aes_key);
-        deque<Node *> matching_keywords = bwt->search((*it).c_str(), aes_key);
+        deque<bwt::Node *> matching_keywords = bwt->search((*it).c_str(), aes_key);
         //vector<int> matching_keywords = bwt->search((*it).c_str(), aes_key);
         gettimeofday(&time2, NULL);
 
@@ -246,15 +247,20 @@ int TestNaiveSolution(char *file_name)
 
 int main(int argc, char * argv[])
 {
-    if (argc != 2)
+    if (argc != 2){
+        cout << "error parameter\n";
         return 0;
+    }
     //char file_name[50] = "./Testfile/distinct_word_5000";
-    char *file_name = argv[1];
+    //char *file_name = argv[1];
     
     //TestNewSolution(file_name);
-    TestBWTSolution(file_name);
+    //TestBWTSolution(file_name);
 //    TestNaiveSolution(file_name);
-
+//    SuffixTree("banana$").visualize();
+    SuffixTree suf("banana$");
+    suf.visualize();
+    suf.search(argv[1]);
     return 0;
 }
 
