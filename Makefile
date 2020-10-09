@@ -6,14 +6,20 @@ LINKER_OPT       =  -L/usr/lib64/ -lcrypto
 INCLUDE_OPT	 = 	-I./include
 SRC_FILE	 = ./*.cpp
 BIN_DIR		 = .
-TARGET		 = SubstringQueryScheme
+TARGET		 = ./TestBWTSolution ./TestNewSolution ./TestSuffixTreeSolution
 
-BUILD_LIST = $(BIN_DIR)/$(TARGET)
+#BUILD_LIST = $(BIN_DIR)/$(TARGET) $(BIN_DIR)/$(TARGET)
 
-all: $(BUILD_LIST)
+all: $(TARGET) 
 
-$(BUILD_LIST):$(SRC_FILE)
-	$(COMPILER) $(OPTIONS) $(BUILD_LIST) $(SRC_FILE) $(INCLUDE_OPT) $(LINKER_OPT) 
+./TestBWTSolution: ./TestBWTSolution.cpp ./AES.cpp ./include/*
+	$(COMPILER) $(OPTIONS) ./TestBWTSolution ./TestBWTSolution.cpp ./AES.cpp  $(INCLUDE_OPT) $(LINKER_OPT) 
+
+./TestNewSolution: ./TestNewSolution.cpp ./AES.cpp ./include/*
+	$(COMPILER) $(OPTIONS) ./TestNewSolution ./TestNewSolution.cpp ./AES.cpp  $(INCLUDE_OPT) $(LINKER_OPT) 
+
+./TestSuffixTreeSolution: ./TestSuffixTreeSolution.cpp ./AES.cpp ./include/*
+	$(COMPILER) $(OPTIONS) ./TestSuffixTreeSolution ./TestSuffixTreeSolution.cpp ./AES.cpp  $(INCLUDE_OPT) $(LINKER_OPT) 
 
 strip_bin :
 	strip -s $(TARGET)
