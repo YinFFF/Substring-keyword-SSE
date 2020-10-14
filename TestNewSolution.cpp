@@ -103,36 +103,11 @@ int TestNewSolution(char *file_name)
     evaluate_time = 1000*((time2.tv_sec-time1.tv_sec) + ((double)(time2.tv_usec-time1.tv_usec))/1000000);
     cout << "generate time: " << evaluate_time << "ms" << endl;
 
-    string insert_keyword;
-    int Repeat_time = 1000;
-    int Keyword_len;
-    // cout << "keyword_len:";
-    // cin >> Keyword_len;
-    int count = 0;
-    // Insert 
-    for (Keyword_len = 1; Keyword_len < 11; Keyword_len++){
-        evaluate_time = 0;
-        count = 0;
-        for (int i = 0; i < Repeat_time; i++) {
-            if (keywords_list[i].size() > Keyword_len){
-                insert_keyword.assign(keywords_list[i], 0, Keyword_len);
-                // cout << "input insert_keyword:" << endl;
-                // cin >> insert_keyword;
-                gettimeofday(&time1,NULL);
-                heap->Insert(insert_keyword, aes_key);
-                gettimeofday(&time2,NULL);
-                count++;
-                evaluate_time += 1000 * ((time2.tv_sec-time1.tv_sec) + ((double)(time2.tv_usec-time1.tv_usec))/1000000);
-            }
-        }
-        cout << "keyword_len:" << insert_keyword.size() <<", count: " << count << ", insert time: " << evaluate_time/count << endl;
-    }
 
     // Search
     // char S[20] = {0};
     // cout << "search keyword:";
     // cin >> S;
-    /*
     map<int,struct time_count> test_count;
 
     for(auto it = keywords_list.begin(); it != keywords_list.end(); it++){
@@ -154,7 +129,6 @@ int TestNewSolution(char *file_name)
     for(auto itr = test_count.begin(); itr != test_count.end(); itr++)
         cout << "matching_keywords.size(): " << (itr)->first << ", " << "matching_count: " << (itr)->second.test_num << ", "<<
         "average_time: " << (itr)->second.total_time/(itr)->second.test_num << endl;
-        */
 
     
     delete heap;
