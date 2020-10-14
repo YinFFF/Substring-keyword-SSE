@@ -12,9 +12,7 @@
 #include <openssl/rand.h>
 #include <stdexcept>
 
-#include "PHIndex.h"
-#include "BFIndex.h"
-#include "BWT.h"
+#include "SuffixTree.h"
 #include "AES.h"
 
 
@@ -94,35 +92,15 @@ int TestSuffixTreeSolution(char *file_name)
     for (int i = 0; i < suffix_tree->nodes.size(); i++) {
         nodes_size += suffix_tree->nodes[i].keyword.size();
         nodes_size += suffix_tree->nodes[i].ch.size() * sizeof(int);
-        //nodes_size += suffix_tree->nodes[i].sub.size();
         nodes_size += (2 * sizeof(int) + sizeof(size_t));
     }
 
     cout << "index of storage: " << nodes_size << endl;
 
-/*
-    int subs_size = 0;
-    for (int i = 0; i < suffix_tree->subs.size(); i++) {
-        subs_size += suffix_tree->subs[i].size();
-    }
-    cout << "suffix_tree.subs.size(): " << subs_size << endl;
-    cout << "after new\n";
-    */
-    //suffix_tree->clear_subs();
-    //std::vector<string>.swap(suffix_tree->subs);
-    /*
-    for (int i = 0; i < suffix_tree->subs.size(); i++) {
-        string(suffix_tree->subs[i]).swap(suffix_tree->subs[i]);
-        //suffix_tree->subs[i].clear();
-        //suffix_tree->subs[i].shrink_to_fit();
-
-    }*/
-
     //msec
     evaluate_time = 1000*((time2.tv_sec-time1.tv_sec) + ((double)(time2.tv_usec-time1.tv_usec))/1000000);
     cout << "generate time: " << evaluate_time << "ms" << endl;
 
-    getchar();
     // Search
     // char S[20] = {0};
     // cout << "search keyword:";
@@ -145,14 +123,12 @@ int TestSuffixTreeSolution(char *file_name)
             test_count[key].test_num += 1;
         }
     }
+
+    //msec
     for(auto itr = test_count.begin(); itr != test_count.end(); itr++)
-        cout << "matching_keywords: " << (itr)->first << ", " << "count: " << (itr)->second.test_num << ", "<<
-        "time: " << (itr)->second.total_time/(itr)->second.test_num << endl;
+        cout << "matching_keywords: " << (itr)->first << ", " << "matching_count: " << (itr)->second.test_num << ", "<<
+        "average_time: " << (itr)->second.total_time/(itr)->second.test_num << endl;
 
-//    for(int i = 0; i < matching_keywords.size(); i++)
-//        cout << matching_keywords[i] << endl;
-
-//    cout << matching_keywords.size() << endl;
     
     delete suffix_tree;
     return 0;   

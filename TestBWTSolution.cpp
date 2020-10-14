@@ -12,8 +12,6 @@
 #include <openssl/rand.h>
 #include <stdexcept>
 
-#include "PHIndex.h"
-#include "BFIndex.h"
 #include "BWT.h"
 #include "AES.h"
 
@@ -114,17 +112,12 @@ int TestBWTSolution(char *file_name)
         gettimeofday(&time1, NULL);
         //deque<Node *> matching_keywords = bwt->search(input.c_str(), aes_key);
         deque<bwt_Node *> matching_keywords = bwt->search((*it).c_str(), aes_key);
-        //vector<int> matching_keywords = bwt->search((*it).c_str(), aes_key);
         gettimeofday(&time2, NULL);
 
         evaluate_time = 1000*((time2.tv_sec-time1.tv_sec) + ((double)(time2.tv_usec-time1.tv_usec))/1000000);
         
-       // if((*it).size() != 7)
-       //     continue;
-
         int key = matching_keywords.size();
-        //int key = (*it).size();// + matching_keywords.size();
-        //int key = strlen(&S[j]);
+
         if (test_count.count(key)==0){
             time_count map_value = {evaluate_time, 1};
             test_count[key] = map_value;
@@ -135,15 +128,12 @@ int TestBWTSolution(char *file_name)
         }
     }
 
+    //msec
     for(auto itr = test_count.begin(); itr != test_count.end(); itr++)
-        cout << "matching_keywords.size(): " << (itr)->first << ", " << "count: " << (itr)->second.test_num << ", "<<
-        "time: " << (itr)->second.total_time/(itr)->second.test_num << endl;
+        cout << "matching_keywords.size(): " << (itr)->first << ", " << "matching_count: " << (itr)->second.test_num << ", "<<
+        "average_time: " << (itr)->second.total_time/(itr)->second.test_num << endl;
 
-//    for(int i = 0; i < matching_keywords.size(); i++)
-//        cout << matching_keywords[i] << endl;
-//    cout << matching_keywords.size() << endl;
     
-    //delete heap;
     delete bwt;
     return 0;   
 }
