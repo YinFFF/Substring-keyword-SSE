@@ -6,7 +6,7 @@ LINKER_OPT       =  -L/usr/lib64/ -lcrypto
 INCLUDE_OPT	 = 	-I./include
 SRC_FILE	 = ./*.cpp
 BIN_DIR		 = .
-TARGET		 = ./TestBWTSolution ./TestNewSolution ./TestSuffixTreeSolution
+TARGET		 = ./TestBWTSolution ./TestNewSolution ./TestSuffixTreeSolution 
 
 #BUILD_LIST = $(BIN_DIR)/$(TARGET) $(BIN_DIR)/$(TARGET)
 

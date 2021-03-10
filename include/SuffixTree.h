@@ -43,7 +43,6 @@ class SuffixTree {
 public:
     vector<Node> nodes;
     
-
     SuffixTree(string & str, vector<string> &keywords_list) {
         int keyword_index = keywords_list.size();
         str.append("$");
@@ -89,7 +88,7 @@ public:
                     // new node for the part in common
                     n2 = nodes.size();
                     nodes.push_back(Node(sub2_left_index, sub2_left_index + j - 1, {n3}, -1, suf, ""));
-                    nodes[n3].left_index = j;
+                    nodes[n3].left_index = sub2_left_index + j;
                     nodes[n3].right_index = suf.size() - 1;
                     nodes[n].ch[x2] = n2;
                     break; // continue down the tree
@@ -100,16 +99,15 @@ public:
             n = n2; // continue down the tree
         }
     }
-    /*
     void recursion_print(int n, const std::string & pre){
         auto children = nodes[n].ch;
         if (children.size() == 0) {
-            std::cout << "- " << nodes[n].sub << '\n';
+            std::cout << "- " << nodes[n].keyword << endl;
             // std::cout << "- " << subs[n] << '\n';
             return;
         }
 
-        std::cout << "+ " << nodes[n].sub << '\n';
+        std::cout << "+ " << nodes[n].keyword << endl;
         // std::cout << "+ " << subs[n] << '\n';
 
         auto it = children.begin();
@@ -131,7 +129,6 @@ public:
         }
         recursion_print(0, "");
     }
-*/
 
     void appendSubtree(int cur_node_index, vector<string> &ret) {
         static int count = 0;

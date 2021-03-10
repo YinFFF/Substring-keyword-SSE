@@ -25,6 +25,9 @@ void ReadKeywords(vector<string> &keywords_list, char* file_name){
         while(getline(readfile, keywords, '\n')){
             //if(readfile.eof())
                 //keywords.append(1, 0);
+            if (keywords[keywords.size() - 1] == '\r'){
+                keywords = keywords.substr(0, keywords.size() - 1);
+            }
             if (keywords.size() == 0) break;
             if(keywords.find('#') != -1) throw invalid_argument("find a # in file\n");
             keywords_list.push_back(keywords);
@@ -37,10 +40,6 @@ void ReadKeywords(vector<string> &keywords_list, char* file_name){
 }
 
 void Keywords_to_str(vector<string> &keywords_list, string &keywords_string){
-    if (keywords_string[keywords_string.size() - 1] == '\r'){
-        keywords_string = keywords_string.substr(0, keywords_string.size() - 1);
-    }
-
     int total_len = 0;
     for(int i = 0; i < keywords_list.size(); i++){
         total_len += (keywords_list[i].size());
@@ -66,7 +65,7 @@ struct time_count{
 // Test the proposed scheme
 int TestNewSolution(char *file_name)
 {
-    cout << "======TestNewSolution========\n";
+    cout << "====== TestNewSolution with file " << file_name << " ========\n";
     struct timeval time1,time2;
     long start, end;
     float evaluate_time;
@@ -97,11 +96,11 @@ int TestNewSolution(char *file_name)
         }
         //nodes_size += suffix_tree->nodes[i].sub.size();
     }
-    cout << "suffix_tree.nodes.size(): " << nodes_size << endl;
+    cout << "Index of storage: " << nodes_size << endl;
 
     //msec
     evaluate_time = 1000*((time2.tv_sec-time1.tv_sec) + ((double)(time2.tv_usec-time1.tv_usec))/1000000);
-    cout << "generate time: " << evaluate_time << "ms" << endl;
+    cout << "Index_generate_time: " << evaluate_time << "ms" << endl;
 
 
     // Search
@@ -128,7 +127,7 @@ int TestNewSolution(char *file_name)
     }
     for(auto itr = test_count.begin(); itr != test_count.end(); itr++)
         cout << "matching_keywords.size(): " << (itr)->first << ", " << "matching_count: " << (itr)->second.test_num << ", "<<
-        "average_time: " << (itr)->second.total_time/(itr)->second.test_num << endl;
+        "average_query_time: " << (itr)->second.total_time/(itr)->second.test_num << endl;
 
     
     delete heap;
